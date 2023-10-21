@@ -1,0 +1,47 @@
+// Define the sleep method and relevant paths.
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+const sleepTime = 600;
+const count = 0;
+
+// Update playlistName to desired playlist
+const playlistName = "New";
+
+(async () => {
+  // Capture the list of liked songs.
+  const likedSongs = document
+    .querySelector("#contents")
+    .children.item(0)
+    .children.item(0).children;
+
+  // Loop over each item in the liked songs list.
+  for (let song of likedSongs) {
+    try {
+      // Click the three-dot menu and give it a moment to appear.
+      const threeDotMenu = song.children.item(5).children.item(1);
+      threeDotMenu.click();
+      await sleep(sleepTime);
+
+      // Click "add to playlist" and give it a moment to process.
+      const addToPlaylist = Array.from(
+        document.querySelectorAll("a[id=navigation-endpoint]")
+      ).find((element) => element.innerText === "Save to playlist");
+      addToPlaylist.click();
+      await sleep(sleepTime);
+
+      // Select desired playlist.
+      const playlist = document.querySelector(`[title="${playlistName}"]`);
+      playlist.click();
+      await sleep(sleepTime);
+    } catch (e) {
+      console.log(song.outerText);
+    }
+
+    // Debug; only process the first n songs.
+    //         count += 1;
+    //         if (count === 3) {
+    //             break;
+    //         }
+  }
+})();
